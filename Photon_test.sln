@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photon_test", "Photon_test.csproj", "{F7F6F3E2-884F-2E7E-48CD-6643D60E6A9B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photon_test.Plugins", "Photon_test.Plugins.csproj", "{21C357C4-D762-9384-1CF4-2E98C1F69837}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photon_test.Editor", "Photon_test.Editor.csproj", "{CDD45B1E-A342-1843-E661-D2C63C2A6454}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F7F6F3E2-884F-2E7E-48CD-6643D60E6A9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7F6F3E2-884F-2E7E-48CD-6643D60E6A9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7F6F3E2-884F-2E7E-48CD-6643D60E6A9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7F6F3E2-884F-2E7E-48CD-6643D60E6A9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21C357C4-D762-9384-1CF4-2E98C1F69837}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21C357C4-D762-9384-1CF4-2E98C1F69837}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21C357C4-D762-9384-1CF4-2E98C1F69837}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21C357C4-D762-9384-1CF4-2E98C1F69837}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDD45B1E-A342-1843-E661-D2C63C2A6454}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDD45B1E-A342-1843-E661-D2C63C2A6454}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDD45B1E-A342-1843-E661-D2C63C2A6454}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDD45B1E-A342-1843-E661-D2C63C2A6454}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
