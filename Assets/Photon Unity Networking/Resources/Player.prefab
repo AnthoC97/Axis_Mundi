@@ -100,7 +100,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1696741616878554}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15.394901, y: 1.7693139e-17, z: -7.9682817}
+  m_LocalPosition: {x: 12.2198305, y: 1.38029635e-17, z: -6.216302}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4529765817127284}
@@ -247,9 +247,13 @@ MonoBehaviour:
   projectil: {fileID: 1112602137412486, guid: 28248992fb926be4192d7d5f92e65d2c, type: 2}
   force: 40
   firerate: 0.2
-  dashSpeed: 50
+  dashSpeed: 100
   startDashTime: 0.1
   startDashDelay: 0.1
+  vitesseCourse: 2
+  startNextDash: 2
+  mainCam: {fileID: 0}
+  targetCam: {fileID: 0}
 --- !u!114 &114761756448496128
 MonoBehaviour:
   m_ObjectHideFlags: 1

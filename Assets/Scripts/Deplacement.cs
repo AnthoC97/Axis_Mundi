@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Deplacement : MonoBehaviour {
+public class Deplacement : MonoBehaviour
+{
     [SerializeField]
     private float speed = 5;
     [SerializeField]
@@ -32,83 +33,145 @@ public class Deplacement : MonoBehaviour {
     private float dashDelay;
     [SerializeField]
     private float startDashDelay;
-    private bool canDash = false;
-    
-    
+    private bool canDashForward = false;
+    private bool canDashLeft = false;
+    private bool canDashBack = false;
+    private bool canDashRight = false;
+    private int i = 0;
+    private bool isMoving = false;
+    [SerializeField]
+    private float vitesseCourse = 1f;
+    private bool isRunning = false;
+    private static bool canPlay;
+    [SerializeField]
+    private float startNextDash;
+    private float nextDash;
+    private bool hasDashed = true;
+    [SerializeField]
+    private GameObject mainCam;
+    [SerializeField]
+    private GameObject targetCam;
+
 
     private bool canInstantiateProjectil = false;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         pv = GetComponent<PhotonView>();
         rb = GetComponent<Rigidbody>();
         dashTime = startDashTime;
         dashDelay = startDashDelay;
+        nextDash = startDashDelay;
+        canPlay = true;
     }
-	
-	// Update is called once per frame
-	void Update () {
-        //Debug.Log(dashTime);
+
+    // Update is called once per frame
+    void Update()
+    {
         direction = Vector3.zero;
-        if (canDash)
+        //Des que le joueur peut dash, il a un delai de 0.1 secondes
+        if (canDashForward || canDashLeft || canDashBack || canDashRight)
         {
             dashDelay -= Time.deltaTime;
         }
-        if(dashDelay <= 0)
+        if (dashDelay <= 0)
         {
             dashDelay = startDashDelay;
-            canDash = false;
+            canDashForward = false;
+            canDashLeft = false;
+            canDashBack = false;
+            canDashRight = false;
         }
-        if (pv.isMine)
+        if (hasDashed)
         {
-           if (Input.GetKey(KeyCode.Z))
+            nextDash -= Time.deltaTime;
+        }
+        if(nextDash <= 0)
+        {
+            hasDashed = false;
+            nextDash = startNextDash;
+        }
+        if (pv.isMine && canPlay)
+        {
+            if (Input.GetKey(KeyCode.Z))
             {
-                if(canDash == false)
+                if (canDashForward == false)
                 {
                     direction += Vector3.forward;
-                    canDash = true;
+                    isMoving = true;
                 }
-                else
+                //Si le joueur appuie et que canDash = true, il dash dans la direction represente par un nombre.
+                else if(canDashForward && !hasDashed)
                 {
+                    hasDashed = true;
                     dashDirection = 2;
-                    Debug.Log("yes");
                 }
+            }
+            //Des que le joueur leve le doigt pour arreter de bouger, il a un delai de 0.1 pour dash à partir de la frame suivante
+            if (Input.GetKeyUp(KeyCode.Z) && isMoving)
+            {
+                isMoving = false;
+                canDashForward = true;
             }
             if (Input.GetKey(KeyCode.Q))
             {
-                if (canDash == false)
+                if (canDashLeft == false)
                 {
                     direction += Vector3.left;
-                    canDash = true;
+                    isMoving = true;
                 }
                 else
                 {
                     dashDirection = 1;
                 }
             }
+            if (Input.GetKeyUp(KeyCode.Q) && isMoving)
+            {
+                isMoving = false;
+                canDashLeft = true;
+            }
             if (Input.GetKey(KeyCode.S))
             {
-                if (canDash == false)
+                if (canDashBack == false)
                 {
                     direction += Vector3.back;
-                    canDash = true;
+                    isMoving = true;
                 }
                 else
                 {
                     dashDirection = 8;
                 }
             }
+            if (Input.GetKeyUp(KeyCode.S) && isMoving)
+            {
+                isMoving = false;
+                canDashBack = true;
+            }
             if (Input.GetKey(KeyCode.D))
             {
-                if (canDash == false)
+                if (canDashRight == false)
                 {
                     direction += Vector3.right;
-                    canDash = true;
+                    isMoving = true;
                 }
                 else
                 {
                     dashDirection = 4;
                 }
+            }
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                isRunning = true;
+            }
+            if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
+                isRunning = false;
+            }
+            if (Input.GetKeyUp(KeyCode.D) && isMoving)
+            {
+                isMoving = false;
+                canDashRight = true;
             }
             //Limiter la cadence de tir
             if (Input.GetMouseButtonDown(0) && Time.time > nextFire)
@@ -116,47 +179,32 @@ public class Deplacement : MonoBehaviour {
                 nextFire = Time.time + firerate;
                 canInstantiateProjectil = true;
             }
-            if (dashDirection != 0)
+           /* if (Input.GetMouseButton(1))
             {
-                if(dashTime <= 0)
-                {
-                    dashDirection = 0;
-                    dashTime = startDashTime;
-                    rb.velocity = Vector3.zero;
-                }
-                else
-                {
-                    dashTime -= Time.deltaTime;
-                    if(dashDirection == 1)
-                    {
-                        rb.velocity = transform.rotation * Vector3.left * dashSpeed;
-                        canDash = false;
-                    }
-                    if(dashDirection == 2)
-                    {
-                        rb.velocity = transform.rotation * Vector3.forward * dashSpeed;
-                        canDash = false;
-                    }
-                    if(dashDirection == 4)
-                    {
-                        rb.velocity = transform.rotation * Vector3.right * dashSpeed;
-                        canDash = false;
-                    }
-                    if (dashDirection == 8)
-                    {
-                        rb.velocity = transform.rotation * Vector3.back * dashSpeed;
-                        canDash = false;
-                    }
-                }
+                Debug.Log("yees");
+                targetCam.SetActive(true);
+                mainCam.SetActive(false);
             }
+            else
+            {
+                targetCam.SetActive(false);
+                mainCam.SetActive(true);
+            }*/
         }
-	}
+    }
 
     private void FixedUpdate()
     {
         if (pv.isMine)
         {
-            transform.position += transform.rotation * direction.normalized * speed * Time.deltaTime;
+            if (isRunning)
+            {
+                transform.position += transform.rotation * direction.normalized * speed * vitesseCourse * Time.deltaTime;
+            }
+            else
+            {
+                transform.position += transform.rotation * direction.normalized * speed * Time.deltaTime;
+            }
             transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * mouseXSensitivityX * Time.deltaTime);
             if (canInstantiateProjectil)
             {
@@ -164,22 +212,47 @@ public class Deplacement : MonoBehaviour {
                 pv.RPC("Shoot", PhotonTargets.All, transform.Find("ProjectilInstanciationPlace").transform.position);
                 canInstantiateProjectil = false;
             }
-            /*if(dashDirection == 1)
+            if (pv.isMine)
             {
-                rb.velocity = Vector3.left * dashSpeed;
+                if (dashDirection != 0)
+                {
+                    if (dashTime <= 0)
+                    {
+                        dashDirection = 0;
+                        dashTime = startDashTime;
+                        rb.velocity = Vector3.zero;
+                    }
+                    else
+                    {
+                        dashTime -= Time.deltaTime;
+                        if (dashDirection == 1)
+                        {
+                            rb.velocity = transform.rotation * Vector3.left * dashSpeed;
+                            canDashLeft = false;
+                            hasDashed = true;
+                        }
+                        //Dash Physique
+                        if (dashDirection == 2)
+                        {
+                            rb.velocity = transform.rotation * Vector3.forward * dashSpeed;
+                            canDashForward = false;
+                            hasDashed = true;
+                        }
+                        if (dashDirection == 4)
+                        {
+                            rb.velocity = transform.rotation * Vector3.right * dashSpeed;
+                            canDashRight = false;
+                            hasDashed = true;
+                        }
+                        if (dashDirection == 8)
+                        {
+                            rb.velocity = transform.rotation * Vector3.back * dashSpeed;
+                            canDashBack = false;
+                            hasDashed = true;
+                        }
+                    }
+                }
             }
-            if(dashDirection == 2)
-            {
-                rb.velocity = Vector3.forward * dashSpeed;
-            }
-            if (dashDirection == 4)
-            {
-                rb.velocity = Vector3.right * dashSpeed;
-            }
-            if(dashDirection == 8)
-            {
-                rb.velocity = Vector3.back * dashSpeed;
-            }*/
         }
     }
 
@@ -188,5 +261,10 @@ public class Deplacement : MonoBehaviour {
     {
         GameObject prjtl = Instantiate(projectil, pos, Quaternion.identity) as GameObject;
         prjtl.GetComponent<Rigidbody>().velocity = transform.TransformDirection(Vector3.forward * force);
+    }
+
+    public static void CantPlay()
+    {
+        canPlay = false;
     }
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BulletScript : MonoBehaviour {
 
-
 	// Use this for initialization
 	void Start () {
         Destroy(gameObject, 2f);

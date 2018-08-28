@@ -11,7 +11,8 @@ public class PlayersHealth : MonoBehaviour {
     private Text txtHealthOther;
     private PhotonView pv;
     private Text txtEndGame;
-    private bool lost = false;
+    private bool lost;
+    private bool endGame;
 
 
 	// Use this for initialization
@@ -20,11 +21,13 @@ public class PlayersHealth : MonoBehaviour {
         txtHealthOther = GameObject.Find("TextHealthOther").GetComponent<Text>();
         pv = GetComponent<PhotonView>();
         txtEndGame = GameObject.Find("TextEndGame").GetComponent<Text>();
+        endGame = false;
+        lost = false;
     }
 	
 	//Points de vies enlevés quand on est touché par la balle d'un joueur.
 	void OnCollisionEnter (Collision col) {
-        if (col.gameObject.layer == 8 && pv.isMine)
+        if (col.gameObject.layer == 8 && pv.isMine && !endGame)
         {
             Debug.Log("yeees");
             health -= 10;
@@ -38,6 +41,7 @@ public class PlayersHealth : MonoBehaviour {
                 //Loose
                 txtEndGame.GetComponent<Text>().enabled = true;
                 txtEndGame.text = "You Loose";
+                Deplacement.CantPlay();
                 pv.RPC("Win", PhotonTargets.Others);
                 lost = true;
                 StartCoroutine(GameEnd());
@@ -54,6 +58,7 @@ public class PlayersHealth : MonoBehaviour {
     [PunRPC]
     private void Win()
     {
+        Deplacement.CantPlay();
         txtEndGame.text = "You Win";
         txtEndGame.GetComponent<Text>().enabled = true;
         lost = false;
@@ -62,6 +67,7 @@ public class PlayersHealth : MonoBehaviour {
 
     IEnumerator GameEnd()
     {
+        endGame = true;
         Cursor.lockState = CursorLockMode.None;
         if (lost)
         {

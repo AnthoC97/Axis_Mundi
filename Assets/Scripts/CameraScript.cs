@@ -84,10 +84,25 @@ public class CameraScript : MonoBehaviour
         Vector3 dir = new Vector3(decalage, hauteur, -distance); //vector3 qui represente la position de la camera par rapport au joueur
         CollisionCheck(player.position + rotation * dir); //changement de position de la camera
         transform.LookAt(player.position); //la camera scrute toujours le joeur
-
-        if (Input.GetKey(KeyCode.F))
+        //Pour viser
+        if (Input.GetMouseButton(1))
         {
+            distance = 1.0f;
+            hauteur = 0.25f;
+            Color temp = targetRender.sharedMaterial.color;
+            temp.a = Mathf.Lerp(temp.a, 0.2f, moveSpeed * Time.deltaTime);
 
+            targetRender.sharedMaterial.color = temp;
+        }
+        //Arrete de viser
+        else
+        {
+            distance = 5.0f;
+            hauteur = 1.0f;
+            Color temp = targetRender.sharedMaterial.color;
+            temp.a = Mathf.Lerp(temp.a, 1f, moveSpeed * Time.deltaTime);
+
+            targetRender.sharedMaterial.color = temp;
         }
     }
 
